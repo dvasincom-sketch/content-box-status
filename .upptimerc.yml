@@ -1,4 +1,40 @@
-@asyaonlineboti18n:
+# Upptime — мониторинг доступности Content Box (тенант Coco Jambo).
+#
+# Как это работает: раз в 5 минут GitHub Actions в ЭТОМ репозитории пингует
+# перечисленные ниже адреса, пишет историю ответов и графики прямо в репозиторий,
+# а при падении заводит issue (и закрывает, когда сайт снова отвечает). Статус-
+# страница — статический сайт на GitHub Pages, поэтому она живёт ОТДЕЛЬНО от
+# приложения: если упадёт сам сайт или сервер Timeweb, страница со статусом
+# останется доступной (в этом весь смысл — как Atlassian Statuspage).
+
+# Владелец и имя ЭТОГО репозитория со статус-страницей (НЕ content-box).
+owner: dvasincom-sketch
+repo: content-box-status
+
+# Что мониторим. Два уровня намеренно:
+#   1. Фронт — «сайт открывается вообще» (Next отдаёт главную).
+#   2. /api/health — «приложение живо И видит базу»: эндпоинт делает SELECT 1 и
+#      отдаёт 200 только при доступном Postgres, иначе 503. Так ловится случай
+#      «сайт открывается, но база отвалилась» — глубокая проверка.
+sites:
+  - name: Сайт Coco Jambo
+    url: https://btsrussia.ru/
+    expectedStatusCodes:
+      - 200
+
+  - name: Приложение и база (health)
+    url: https://btsrussia.ru/api/health
+    expectedStatusCodes:
+      - 200
+
+# Кого назначать на issue о падении.
+assignees:
+  - dvasincom-sketch
+
+# ВАЖНО: i18n лежит В КОРНЕ конфига, а не под status-website. Именно отсюда
+# генератор берёт перевод интерфейса; если положить его внутрь status-website,
+# подписи («Live Status», футер, кнопки) останутся английскими по умолчанию.
+i18n:
   activeIncidents: Активные инциденты
   allSystemsOperational: Все системы работают штатно
   incidentReport: 'Инцидент #$NUMBER — отчёт →'
@@ -501,378 +537,4 @@ status-website:
 
       // Редкий авто-рефреш сводки (раз в 10 мин) — чтобы не жечь лимит API.
       setInterval(function () { loadDash().then(renderDash); }, 600000);
-    })();i18n:
-  activeIncidents: Активные инциденты
-  allSystemsOperational: Все системы работают штатно
-  incidentReport: 'Инцидент #$NUMBER — отчёт →'
-  activeIncidentSummary: 'Открыт $DATE, записей: $POSTS'
-  incidentTitle: 'Инцидент $NUMBER — подробности'
-  incidentDetails: Подробности инцидента
-  incidentFixed: Устранён
-  incidentOngoing: В работе
-  incidentOpenedAt: Открыт
-  incidentClosedAt: Закрыт
-  incidentViewOnGitHub: Открыть и подписаться на GitHub
-  incidentCommentSummary: '$DATE, автор $AUTHOR'
-  incidentBack: ← Ко всем инцидентам
-  pastIncidents: Прошлые инциденты
-  pastIncidentsResolved: 'Устранён за $MINUTES мин, записей: $POSTS'
-  liveStatus: Статус в реальном времени
-  overallUptime: 'Общая доступность: $UPTIME'
-  overallUptimeTitle: Общая доступность
-  averageResponseTime: 'Среднее время ответа: $TIMEмс'
-  averageResponseTimeTitle: Среднее время ответа
-  sevelDayResponseTime: Время ответа за 7 дней
-  responseTimeMs: Время ответа (мс)
-  up: Работает
-  down: Недоступен
-  degraded: Замедлен
-  ms: мс
-  loading: Загрузка
-  navGitHub: GitHub
-  footer: 'Страница [с открытым исходным кодом]($REPO), работает на [Upptime](https://upptime.js.org).'
-  pastScheduledMaintenance: Прошлые плановые работы
-  scheduledMaintenance: Плановые работы
-  scheduledMaintenanceSummaryStarted: 'Начало $DATE, длительность $DURATION мин'
-  scheduledMaintenanceSummaryStarts: 'Начнётся $DATE, длительность $DURATION мин'
-  startedAt: Начало
-  startsAt: Начнётся
-  duration: Длительность
-  durationMin: '$DURATION мин'
-  incidentCompleted: Завершено
-  incidentScheduled: Запланировано
-  duration24H: 24ч
-  duration7D: 7д
-  duration30D: 30д
-  duration1Y: 1г
-  durationAll: всё
-  locale: ru-RU
-
-status-website:
-  # КРИТИЧНО для проектной страницы в подпапке github.io/content-box-status:
-  # без baseUrl приложение ищет свои /client/*.js от корня домена и получает
-  # 404/503 — страница остаётся «мёртвым» каркасом с пустыми кружками. С baseUrl
-  # пути к бандлу получают нужный префикс, JS грузится, карточки оживают.
-  # Если поднимешь свой домен (cname ниже) — baseUrl нужно будет УБРАТЬ, там
-  # сайт уже в корне.
-  baseUrl: /content-box-status
-
-  name: Content Box — статус
-  # Свой поддомен (опционально): раскомментируй cname, добавь CNAME-запись в DNS
-  # (status → dvasincom-sketch.github.io) и УБЕРИ baseUrl выше.
-  # cname: status.btsrussia.ru
-  introTitle: '**Content Box** — статус сервисов'
-  introMessage: >-
-    Актуальная доступность сайта Coco Jambo и его API. Данные обновляются
-    автоматически каждые 5 минут. Страница размещена отдельно от приложения,
-    поэтому остаётся доступной даже во время сбоя на сайте.
-  navbar:
-    - title: Статус
-      href: /
-    - title: Сайт
-      href: https://btsrussia.ru
-    - title: GitHub
-      href: https://github.com/dvasincom-sketch/content-box-status
-
-  # ── Оформление: темы Content Box + переключатель ──────────────────────────
-  # Тема берётся из дизайн-системы Content Box (пресет neon-dawn): тёмная
-  # «Неоновая заря» и светлая «Лунное затмение», плюс сохранён текущий «Фан-сайт»
-  # (более насыщенный тёмный вариант). Переключатель тем добавляется скриптом
-  # ниже (js:) и ставит атрибут data-theme на <html>; сам выбор запоминается.
-  # По умолчанию — тёмная (как в студии).
-  #
-  # Токены (design-system.md / theme-presets-brief.md):
-  #   Тёмная:  фон #0F0A1E, карточки #1A1330, текст #F5F3FF
-  #   Светлая: фон #F7F5FB, карточки #FFFFFF, текст #1E1A2E
-  #   Акцент во всех: primary #7C3AED, secondary #EC4899
-  css: |
-    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700;800&display=swap');
-
-    /* Статусные цвета — одинаковы во всех темах (зелёный/жёлтый/красный). */
-    :root {
-      --up-border-left-color: #22C55E;
-      --degraded-border-left-color: #F59E0B;
-      --down-border-left-color: #EF4444;
-      --tag-color: #FFFFFF;
-      --tag-up-background-color: #16A34A;
-      --tag-degraded-background-color: #D97706;
-      --tag-down-background-color: #DC2626;
-      --down-background-color: rgba(239, 68, 68, 0.10);
-      --submit-button-color: #FFFFFF;
-      --error-button-color: #FFFFFF;
-      --graph-opacity: 0.9;
-    }
-
-    /* ── ТЁМНАЯ (студия, по умолчанию) и ФАН делят тёмную палитру ─────────── */
-    :root,
-    html[data-theme="dark"],
-    html[data-theme="fan"] {
-      --body-background-color: #0F0A1E;
-      --body-text-color: #F5F3FF;
-      --card-background-color: #1A1330;
-      --card-border-color: rgba(124, 58, 237, 0.20);
-      --change-background-color: #14102B;
-      --nav-background-color: transparent;
-      --nav-border-bottom-color: rgba(124, 58, 237, 0.28);
-      --nav-current-border-bottom-color: transparent;
-      --submit-button-background-color: #7C3AED;
-      --submit-button-border-color: #7C3AED;
-      --error-button-background-color: #7C3AED;
-      --error-button-border-color: #7C3AED;
-      --cb-link: #C4B5FD;
-      --cb-link-hover: #DDD6FE;
-      --cb-muted: rgba(245, 243, 255, 0.62);
-      --cb-pill-border: rgba(124, 58, 237, 0.40);
-      --cb-pill-bg: rgba(124, 58, 237, 0.08);
-      --cb-pill-bg-hover: rgba(124, 58, 237, 0.22);
-      --cb-card-hover-shadow: 0 14px 38px rgba(0, 0, 0, 0.45);
-    }
-    /* Студийная тёмная — сдержанное свечение (чище, «как в студии»). */
-    :root,
-    html[data-theme="dark"] {
-      --cb-page-glow:
-        radial-gradient(60% 45% at 12% -5%, rgba(124, 58, 237, 0.14), transparent 60%),
-        radial-gradient(55% 45% at 96% 8%, rgba(236, 72, 153, 0.08), transparent 55%);
-    }
-    /* Фан-сайт — прежнее насыщенное свечение и подсветка карточек акцентом. */
-    html[data-theme="fan"] {
-      --cb-page-glow:
-        radial-gradient(1100px 600px at 15% -5%, rgba(124, 58, 237, 0.22), transparent 60%),
-        radial-gradient(900px 500px at 100% 0%, rgba(236, 72, 153, 0.14), transparent 55%);
-      --cb-card-hover-shadow: 0 14px 38px rgba(124, 58, 237, 0.28);
-    }
-
-    /* ── СВЕТЛАЯ (студия, «Лунное затмение») ──────────────────────────────── */
-    html[data-theme="light"] {
-      --body-background-color: #F7F5FB;
-      --body-text-color: #1E1A2E;
-      --card-background-color: #FFFFFF;
-      --card-border-color: rgba(124, 58, 237, 0.16);
-      --change-background-color: #EFEAF6;
-      --nav-background-color: transparent;
-      --nav-border-bottom-color: rgba(124, 58, 237, 0.18);
-      --nav-current-border-bottom-color: transparent;
-      --submit-button-background-color: #7C3AED;
-      --submit-button-border-color: #7C3AED;
-      --error-button-background-color: #7C3AED;
-      --error-button-border-color: #7C3AED;
-      --cb-link: #6D28D9;
-      --cb-link-hover: #7C3AED;
-      --cb-muted: rgba(30, 26, 46, 0.60);
-      --cb-pill-border: rgba(124, 58, 237, 0.30);
-      --cb-pill-bg: rgba(124, 58, 237, 0.06);
-      --cb-pill-bg-hover: rgba(124, 58, 237, 0.14);
-      --cb-card-hover-shadow: 0 12px 30px rgba(124, 58, 237, 0.16);
-      --cb-page-glow:
-        radial-gradient(60% 45% at 12% -5%, rgba(124, 58, 237, 0.08), transparent 60%),
-        radial-gradient(55% 45% at 96% 8%, rgba(236, 72, 153, 0.06), transparent 55%);
-      --graph-opacity: 0.85;
-    }
-
-    /* ── Общая структура (не зависит от темы) ─────────────────────────────── */
-    body {
-      font-family: 'Manrope', system-ui, -apple-system, sans-serif;
-      background: var(--cb-page-glow), var(--body-background-color);
-      background-attachment: fixed;
-      color: var(--body-text-color);
-    }
-
-    h1, h2, h3, .logo, .lead {
-      font-family: 'Unbounded', system-ui, sans-serif;
-      letter-spacing: -0.01em;
-    }
-    h1 { font-weight: 800; }
-
-    .container {
-      max-width: 880px;
-      margin: 0 auto;
-      padding-left: 20px;
-      padding-right: 20px;
-    }
-    /* (1) Отступ сверху — заголовок не должен упираться в край. */
-    #sapper main { order: 1; padding-top: 44px; }
-
-    /* ── Меню вниз, бледным «футером» ──────────────────────────────────────
-       Разметка Upptime: div#sapper > nav, main, footer. Колонкой + order
-       переставляем nav под контент; оформляем мелко и приглушённо, как футер. */
-    #sapper { display: flex; flex-direction: column; min-height: 100vh; }
-    #sapper nav    { order: 2; }
-    #sapper footer { order: 3; }
-    nav {
-      position: static;
-      backdrop-filter: none;
-      border-bottom: none;
-      border-top: 1px solid var(--nav-border-bottom-color);
-      margin-top: 28px;
-      padding-top: 6px;
-    }
-    nav ul { display: flex; justify-content: center; flex-wrap: wrap; gap: 2px; }
-    nav a {
-      font-size: 0.85rem;
-      font-weight: 500;
-      background: transparent;
-      color: var(--cb-muted);
-      border-radius: 8px;
-      padding: 4px 10px;
-      opacity: 0.85;
-    }
-    nav a:hover { color: var(--cb-link-hover); opacity: 1; background: transparent; }
-    /* Меню — футер: убираем индикатор «текущей» страницы (фиолетовое подчёркивание). */
-    nav a, nav a[aria-current], nav .current { border-bottom: none; }
-
-    /* (3) Строка «Статус в реальном времени» + переключатель периодов —
-       разносим с карточками, чтобы пилюли не наезжали на первую плашку. */
-    .container > .f { align-items: center; margin-bottom: 4px; }
-    section.live-status { margin-top: 20px; }
-
-    /* Карточки сервисов: мягкие скругления, тень, акцентная полоса слева. */
-    .container .up,
-    .container .down,
-    .container .degraded {
-      border-radius: 16px;
-      border-left-width: 5px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
-      padding: 18px 20px;
-      margin-bottom: 14px;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .container .up:hover,
-    .container .down:hover,
-    .container .degraded:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--cb-card-hover-shadow);
-    }
-
-    /* (2) Убираем стандартные иконки-фавиконы у названий сервисов. Ведущий
-       эмодзи ✅ в сводном баннере снимается скриптом ниже (это текст, не иконка). */
-    .container .icon { display: none; }
-    .container h4 a { margin-left: 0; }
-
-    .tag, [class*="tag"] {
-      border-radius: 999px;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-    }
-
-    a { color: var(--cb-link); }
-    a:hover { color: var(--cb-link-hover); }
-
-    /* Переключатель периодов (24ч/7д/30д/1г/всё): радио → кликабельные пилюли. */
-    form.r { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-    form.r > div { margin: 0; }
-    form.r input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
-    form.r label {
-      display: inline-block;
-      cursor: pointer;
-      border: 1px solid var(--cb-pill-border);
-      border-radius: 999px;
-      padding: 5px 14px;
-      font-weight: 600;
-      color: var(--cb-link);
-      background: var(--cb-pill-bg);
-      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-    }
-    form.r label:hover { background: var(--cb-pill-bg-hover); color: var(--cb-link-hover); }
-    form.r input[type="radio"]:checked + label {
-      background: #7C3AED;
-      border-color: #7C3AED;
-      color: #FFFFFF;
-    }
-    form.r input[type="radio"]:focus-visible + label {
-      outline: 2px solid var(--cb-link-hover);
-      outline-offset: 2px;
-    }
-
-    footer { opacity: 0.75; font-size: 0.9rem; }
-
-    /* ── Переключатель тем (вставляется скриптом, вне Svelte-дерева) ───────── */
-    #cb-theme-switch {
-      position: fixed;
-      top: 12px;
-      right: 12px;
-      z-index: 9999;
-      display: flex;
-      gap: 4px;
-      padding: 4px;
-      background: var(--card-background-color);
-      border: 1px solid var(--card-border-color);
-      border-radius: 999px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-      font-family: 'Manrope', system-ui, sans-serif;
-    }
-    #cb-theme-switch button {
-      border: none;
-      cursor: pointer;
-      border-radius: 999px;
-      padding: 5px 12px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      background: transparent;
-      color: var(--cb-muted);
-      transition: background 0.15s ease, color 0.15s ease;
-    }
-    #cb-theme-switch button:hover { color: var(--cb-link-hover); }
-    #cb-theme-switch button[aria-pressed="true"] { background: #7C3AED; color: #FFFFFF; }
-
-    @media (max-width: 560px) {
-      #cb-theme-switch { top: 8px; right: 8px; }
-      #cb-theme-switch button { padding: 4px 9px; font-size: 0.72rem; }
-    }
-
-  # Скрипт: переключатель тём (data-theme на <html>, выбор в localStorage,
-  # по умолчанию тёмная) + снятие ведущего статус-эмодзи со сводного баннера.
-  js: |
-    (function () {
-      var THEMES = ['dark', 'light', 'fan'];
-      var LABELS = { dark: 'Тёмная', light: 'Светлая', fan: 'Фан' };
-      var KEY = 'cb-status-theme';
-      var saved = null;
-      try { saved = localStorage.getItem(KEY); } catch (e) {}
-      var current = THEMES.indexOf(saved) >= 0 ? saved : 'dark';
-
-      var sw = document.createElement('div');
-      sw.id = 'cb-theme-switch';
-
-      function apply(t) {
-        document.documentElement.setAttribute('data-theme', t);
-        try { localStorage.setItem(KEY, t); } catch (e) {}
-        current = t;
-        var btns = sw.children;
-        for (var i = 0; i < btns.length; i++) {
-          btns[i].setAttribute('aria-pressed', btns[i].dataset.theme === t ? 'true' : 'false');
-        }
-      }
-
-      THEMES.forEach(function (t) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.dataset.theme = t;
-        b.textContent = LABELS[t];
-        b.addEventListener('click', function () { apply(t); });
-        sw.appendChild(b);
-      });
-
-      function mount() { if (document.body && !document.body.contains(sw)) document.body.appendChild(sw); }
-
-      // Снять ведущий статус-эмодзи (✅ и подобные) со сводного баннера.
-      // Карточки не трогаем: у них первый узел — элемент, а не текст.
-      var EMOJI = /^[\s✅✔️⚠\u{1F534}\u{1F7E0}\u{1F7E1}\u{1F7E2}\u{1F7E5}\u{1F7E7}\u{1F7E9}]+/u;
-      function stripEmoji() {
-        var arts = document.querySelectorAll('.container article');
-        for (var i = 0; i < arts.length; i++) {
-          var n = arts[i].firstChild;
-          if (n && n.nodeType === 3) {
-            var cleaned = n.nodeValue.replace(EMOJI, '');
-            if (cleaned !== n.nodeValue) n.nodeValue = cleaned;
-          }
-        }
-      }
-
-      apply(current);
-      mount();
-      stripEmoji();
-
-      // Svelte перерисовывает контент — переставляем switch назад и чистим эмодзи.
-      var mo = new MutationObserver(function () { mount(); stripEmoji(); });
-      mo.observe(document.documentElement, { childList: true, subtree: true });
     })();
