@@ -63,7 +63,7 @@ i18n:
   ms: мс
   loading: Загрузка
   navGitHub: GitHub
-  footer: 'Страница [с открытым исходным кодом]($REPO), работает на [Upptime](https://upptime.js.org).'
+  footer: '2026 | Контент Бокс'
   pastScheduledMaintenance: Прошлые плановые работы
   scheduledMaintenance: Плановые работы
   scheduledMaintenanceSummaryStarted: 'Начало $DATE, длительность $DURATION мин'
