@@ -178,15 +178,43 @@ status-website:
       padding-right: 20px;
     }
 
-    /* Навигация: полупрозрачная, «приклеенная» сверху */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: saturate(140%) blur(8px);
-      border-bottom: 1px solid var(--nav-border-bottom-color);
+    /* ── Меню вниз, как футер ─────────────────────────────────────────────
+       Разметка Upptime: div#sapper > nav, main, footer. Раскладываем #sapper
+       колонкой и порядком (order) переставляем nav под контент. Так меню
+       уезжает в самый низ страницы, а «приклеенная» шапка исчезает. */
+    #sapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
-    nav a { font-weight: 600; }
+    #sapper main   { order: 1; }
+    #sapper nav    { order: 2; }
+    #sapper footer { order: 3; }
+
+    /* Само меню-футер: не липкое, тонкая линия сверху, пункты по центру,
+       без серых плашек по умолчанию. */
+    nav {
+      position: static;
+      backdrop-filter: none;
+      border-bottom: none;
+      border-top: 1px solid var(--nav-border-bottom-color);
+      margin-top: 28px;
+      padding-top: 8px;
+    }
+    nav ul {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    nav a {
+      font-weight: 600;
+      background: transparent;
+      color: rgba(245, 243, 255, 0.72);
+      border-radius: 8px;
+      padding: 6px 12px;
+    }
+    nav a:hover { color: #DDD6FE; background: rgba(124, 58, 237, 0.14); }
 
     /* Карточки сервисов: мягкие скругления, тень, акцентная полоса слева */
     .container .up,
@@ -206,6 +234,10 @@ status-website:
       box-shadow: 0 14px 38px rgba(124, 58, 237, 0.22);
     }
 
+    /* Убираем стандартные иконки-фавиконы (duckduckgo) слева от названий. */
+    .container .icon { display: none; }
+    .container h4 a { margin-left: 0; }
+
     /* Плашки статуса — капсулой */
     .tag, [class*="tag"] {
       border-radius: 999px;
@@ -217,14 +249,44 @@ status-website:
     a { color: #C4B5FD; }
     a:hover { color: #DDD6FE; }
 
-    /* Переключатель периодов (24ч/7д/…): аккуратные пилюли */
-    .live-status form label {
+    /* ── Переключатель периодов (24ч/7д/30д/1г/всё) ────────────────────────
+       Это радиокнопки с подписями. Прячем сам кружок радио, а подпись делаем
+       кликабельной «пилюлей»: видно, что вариантов несколько и один выбран.
+       Клик по подписи по-прежнему переключает радио (label for=…). */
+    form.r { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    form.r > div { margin: 0; }
+    form.r input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    form.r label {
+      display: inline-block;
+      cursor: pointer;
+      border: 1px solid rgba(124, 58, 237, 0.40);
       border-radius: 999px;
-      padding: 4px 12px;
+      padding: 5px 14px;
+      font-weight: 600;
+      color: #C4B5FD;
+      background: rgba(124, 58, 237, 0.08);
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    form.r label:hover { background: rgba(124, 58, 237, 0.22); color: #EDE9FE; }
+    form.r input[type="radio"]:checked + label {
+      background: #7C3AED;
+      border-color: #7C3AED;
+      color: #FFFFFF;
+    }
+    /* Доступность с клавиатуры: видимая рамка при фокусе. */
+    form.r input[type="radio"]:focus-visible + label {
+      outline: 2px solid #DDD6FE;
+      outline-offset: 2px;
     }
 
-    /* Футер — тише основного текста */
-    footer, .f {
+    /* Футер — тише основного текста (только сам footer; класс .f есть и у
+       переключателя периодов, поэтому его сюда не берём). */
+    footer {
       opacity: 0.75;
       font-size: 0.9rem;
     }
