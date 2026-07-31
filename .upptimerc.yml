@@ -1,31 +1,104 @@
-# Change these first
-owner: upptime # Your GitHub organization or username, where this repository lives
-repo: upptime # The name of this repository
+# Upptime — мониторинг доступности Content Box (тенант Coco Jambo).
+#
+# Как это работает: раз в 5 минут GitHub Actions в ЭТОМ репозитории пингует
+# перечисленные ниже адреса, пишет историю ответов и графики прямо в репозиторий,
+# а при падении заводит issue (и закрывает, когда сайт снова отвечает). Статус-
+# страница — статический сайт на GitHub Pages, поэтому она живёт ОТДЕЛЬНО от
+# приложения: если упадёт сам сайт или сервер Timeweb, страница со статусом
+# останется доступной (в этом весь смысл — как Atlassian Statuspage).
+#
+# Репозиторий создаётся из шаблона upptime/upptime; сюда кладётся только этот
+# файл. Инструкция по установке — в upptime-setup-ru.md.
 
+# Владелец и имя ЭТОГО репозитория со статус-страницей (НЕ content-box).
+# Если назовёшь репозиторий иначе — поправь repo здесь.
+owner: dvasincom-sketch
+repo: content-box-status
+
+# Что мониторим. Два уровня намеренно:
+#   1. Фронт — «сайт открывается вообще» (Next отдаёт главную).
+#   2. /api/health — «приложение живо И видит базу»: эндпоинт делает SELECT 1 и
+#      отдаёт 200 только при доступном Postgres, иначе 503. Поэтому здесь ловится
+#      случай «сайт открывается, но база отвалилась» — глубокая проверка.
 sites:
-  - name: Google
-    url: https://www.google.com
-  - name: Wikipedia
-    url: https://en.wikipedia.org
-  - name: Hacker News
-    url: https://news.ycombinator.com
-  - name: Secret Site
-    url: $SECRET_SITE
+  - name: Сайт Coco Jambo
+    url: https://btsrussia.ru/
+    # Строго 200: главная не должна редиректить. Если увидим 3xx/5xx — инцидент.
+    expectedStatusCodes:
+      - 200
+
+  - name: Приложение и база (health)
+    url: https://btsrussia.ru/api/health
+    # 200 = приложение отвечает и достучалось до Postgres. 503 (база недоступна)
+    # автоматически считается падением — отдельного правила не нужно.
+    expectedStatusCodes:
+      - 200
+
+# Кого назначать на issue о падении. Впиши свой GitHub-логин, если он другой.
+assignees:
+  - dvasincom-sketch
 
 status-website:
-  # Add your custom domain name, or remove the `cname` line if you don't have a domain
-  # Uncomment the `baseUrl` line if you don't have a custom domain and add your repo name there
-  cname: demo.upptime.js.org
-  # baseUrl: /your-repo-name
-  logoUrl: https://raw.githubusercontent.com/upptime/upptime.js.org/master/static/img/icon.svg
-  name: Upptime
-  introTitle: "**Upptime** is the open-source uptime monitor and status page, powered entirely by GitHub."
-  introMessage: This is a sample status page which uses **real-time** data from our [GitHub repository](https://github.com/upptime/upptime). No server required — just GitHub Actions, Issues, and Pages. [**Get your own for free**](https://github.com/upptime/upptime)
+  name: Content Box — статус
+  # Если поднимешь поддомен status.btsrussia.ru — раскомментируй и укажи его,
+  # затем добавь CNAME-запись у DNS-провайдера (см. инструкцию). Без CNAME
+  # страница просто откроется по адресу вида dvasincom-sketch.github.io/content-box-status.
+  # cname: status.btsrussia.ru
+  introTitle: '**Content Box** — статус сервисов'
+  introMessage: >-
+    Актуальная доступность сайта Coco Jambo и его API. Данные обновляются
+    автоматически каждые 5 минут. Страница размещена отдельно от приложения,
+    поэтому остаётся доступной даже во время сбоя на сайте.
   navbar:
-    - title: Status
+    - title: Статус
       href: /
     - title: GitHub
-      href: https://github.com/$OWNER/$REPO
+      href: https://github.com/dvasincom-sketch/content-box-status
 
-# Upptime also supports notifications, assigning issues, and more
-# See https://upptime.js.org/docs/configuration
+  # Полная русская локализация интерфейса статус-страницы.
+  i18n:
+    activeIncidents: Активные инциденты
+    allSystemsOperational: Все системы работают штатно
+    incidentReport: 'Инцидент #$NUMBER — отчёт →'
+    activeIncidentSummary: 'Открыт $DATE, записей: $POSTS'
+    incidentTitle: 'Инцидент $NUMBER — подробности'
+    incidentDetails: Подробности инцидента
+    incidentFixed: Устранён
+    incidentOngoing: В работе
+    incidentOpenedAt: Открыт
+    incidentClosedAt: Закрыт
+    incidentViewOnGitHub: Открыть и подписаться на GitHub
+    incidentCommentSummary: '$DATE, автор $AUTHOR'
+    incidentBack: ← Ко всем инцидентам
+    pastIncidents: Прошлые инциденты
+    pastIncidentsResolved: 'Устранён за $MINUTES мин, записей: $POSTS'
+    liveStatus: Статус в реальном времени
+    overallUptime: 'Общая доступность: $UPTIME'
+    overallUptimeTitle: Общая доступность
+    averageResponseTime: 'Среднее время ответа: $TIMEмс'
+    averageResponseTimeTitle: Среднее время ответа
+    sevelDayResponseTime: Время ответа за 7 дней
+    responseTimeMs: Время ответа (мс)
+    up: Работает
+    down: Недоступен
+    degraded: Замедлен
+    ms: мс
+    loading: Загрузка
+    navGitHub: GitHub
+    footer: 'Страница [с открытым исходным кодом]($REPO), работает на [Upptime](https://upptime.js.org).'
+    pastScheduledMaintenance: Прошлые плановые работы
+    scheduledMaintenance: Плановые работы
+    scheduledMaintenanceSummaryStarted: 'Начало $DATE, длительность $DURATION мин'
+    scheduledMaintenanceSummaryStarts: 'Начнётся $DATE, длительность $DURATION мин'
+    startedAt: Начало
+    startsAt: Начнётся
+    duration: Длительность
+    durationMin: '$DURATION мин'
+    incidentCompleted: Завершено
+    incidentScheduled: Запланировано
+    duration24H: 24ч
+    duration7D: 7д
+    duration30D: 30д
+    duration1Y: 1г
+    durationAll: всё
+    locale: ru-RU
