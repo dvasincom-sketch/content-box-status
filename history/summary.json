@@ -5,19 +5,17 @@
     "icon": "https://icons.duckduckgo.com/ip3/btsrussia.ru.ico",
     "slug": "sajt-coco-jambo",
     "status": "up",
-    "uptime": "99.83%",
-    "uptimeDay": "99.05%",
-    "uptimeWeek": "99.83%",
-    "uptimeMonth": "99.83%",
-    "uptimeYear": "99.83%",
+    "uptime": "100.00%",
+    "uptimeDay": "100.00%",
+    "uptimeWeek": "100.00%",
+    "uptimeMonth": "100.00%",
+    "uptimeYear": "100.00%",
     "time": 1617,
-    "timeDay": 1123,
+    "timeDay": 994,
     "timeWeek": 1617,
     "timeMonth": 1617,
     "timeYear": 1617,
-    "dailyMinutesDown": {
-      "2026-08-05": 14
-    }
+    "dailyMinutesDown": {}
   },
   {
     "name": "Приложение и база (health)",
@@ -25,18 +23,16 @@
     "icon": "https://icons.duckduckgo.com/ip3/btsrussia.ru.ico",
     "slug": "prilozhenie-i-baza-health",
     "status": "up",
-    "uptime": "99.83%",
-    "uptimeDay": "99.06%",
-    "uptimeWeek": "99.83%",
-    "uptimeMonth": "99.83%",
-    "uptimeYear": "99.83%",
+    "uptime": "100.00%",
+    "uptimeDay": "100.00%",
+    "uptimeWeek": "100.00%",
+    "uptimeMonth": "100.00%",
+    "uptimeYear": "100.00%",
     "time": 961,
-    "timeDay": 1677,
+    "timeDay": 2195,
     "timeWeek": 961,
     "timeMonth": 961,
     "timeYear": 961,
-    "dailyMinutesDown": {
-      "2026-08-05": 13
-    }
+    "dailyMinutesDown": {}
   }
 ]
