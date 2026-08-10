@@ -4,20 +4,21 @@
     "url": "https://btsrussia.ru/",
     "icon": "https://icons.duckduckgo.com/ip3/btsrussia.ru.ico",
     "slug": "sajt-coco-jambo",
-    "status": "up",
-    "uptime": "98.11%",
-    "uptimeDay": "96.74%",
+    "status": "down",
+    "uptime": "98.12%",
+    "uptimeDay": "96.72%",
     "uptimeWeek": "97.42%",
-    "uptimeMonth": "98.11%",
-    "uptimeYear": "98.11%",
-    "time": 1584,
-    "timeDay": 1429,
-    "timeWeek": 1441,
-    "timeMonth": 1584,
-    "timeYear": 1584,
+    "uptimeMonth": "98.12%",
+    "uptimeYear": "98.12%",
+    "time": 1545,
+    "timeDay": 1214,
+    "timeWeek": 1386,
+    "timeMonth": 1545,
+    "timeYear": 1545,
     "dailyMinutesDown": {
       "2026-08-07": 213,
-      "2026-08-09": 47
+      "2026-08-09": 47,
+      "2026-08-10": 0
     }
   },
   {
@@ -25,20 +26,21 @@
     "url": "https://btsrussia.ru/api/health",
     "icon": "https://icons.duckduckgo.com/ip3/btsrussia.ru.ico",
     "slug": "prilozhenie-i-baza-health",
-    "status": "up",
-    "uptime": "98.11%",
+    "status": "down",
+    "uptime": "98.13%",
     "uptimeDay": "96.75%",
     "uptimeWeek": "97.43%",
-    "uptimeMonth": "98.11%",
-    "uptimeYear": "98.11%",
-    "time": 1184,
-    "timeDay": 690,
-    "timeWeek": 1449,
-    "timeMonth": 1184,
-    "timeYear": 1184,
+    "uptimeMonth": "98.13%",
+    "uptimeYear": "98.13%",
+    "time": 1161,
+    "timeDay": 666,
+    "timeWeek": 1396,
+    "timeMonth": 1161,
+    "timeYear": 1161,
     "dailyMinutesDown": {
       "2026-08-07": 213,
-      "2026-08-09": 47
+      "2026-08-09": 47,
+      "2026-08-10": 0
     }
   }
 ]
