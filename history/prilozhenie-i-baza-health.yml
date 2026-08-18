@@ -1,7 +1,7 @@
 url: https://btsrussia.ru/api/health
-status: up
-code: 200
-responseTime: 523
-lastUpdated: 2026-08-17T23:11:43.446Z
+status: down
+code: 502
+responseTime: 739
+lastUpdated: 2026-08-18T07:01:29.610Z
 startTime: 2026-07-31T13:41:27.196Z
 generator: Upptime <https://github.com/upptime/upptime>
