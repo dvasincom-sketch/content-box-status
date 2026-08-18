@@ -1,7 +1,7 @@
 url: https://btsrussia.ru/
-status: up
-code: 200
-responseTime: 1418
-lastUpdated: 2026-08-17T23:11:42.890Z
+status: down
+code: 502
+responseTime: 736
+lastUpdated: 2026-08-18T07:01:13.820Z
 startTime: 2026-07-31T13:41:25.467Z
 generator: Upptime <https://github.com/upptime/upptime>
